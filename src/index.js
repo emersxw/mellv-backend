@@ -2,6 +2,8 @@ import "@babel/polyfill";
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import 'dotenv/config';
+import { pool } from './config';
 
 const app = express();
 
@@ -13,9 +15,27 @@ app.use(cors());
 // app.use('/projects', authMiddleware, routes);
 // app.use('/api', authMiddleware, apiRoutes);
 
-app.get('/', (req, res) => {
-  console.log(req.body);
-  res.json({message: 'hello world :)!'});
+console.log(process.env.DB_USER);
+
+app.get('/', (request, response) => {
+    pool.query('SELECT * FROM books', (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+      response.status(200).json(results.rows)
+    })
+  console.log(request.body);
+})
+
+app.post('/', (request, response) => {
+  const { author, title } = request.body
+  pool.query('INSERT INTO books (author, title) VALUES ($1, $2)', [author, title], error => {
+    if (error) {
+      // throw error
+      console.log(error);
+    }
+    response.status(201).json({ status: 'success', message: 'Book added.' })
+  })
 })
 
 app.listen(5000, () => console.log('magic happens on port 5000'));
