@@ -10,8 +10,10 @@ app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000
 app.use(cors());
 
 import userRoutes from './controllers/userController';
+import products from './controllers/product';
 
 app.use('/api', userRoutes);
+app.use('/product', products);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log('magic happens on port ' + port));

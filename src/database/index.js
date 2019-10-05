@@ -9,11 +9,7 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-export default { query: (text, params) => pool.query(text, params) }
-
-
-
-
+export default { query: (text, params) => pool.query(text, params) };
 
 // const isProduction = process.env.NODE_ENV === 'production'
 
