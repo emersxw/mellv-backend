@@ -101,6 +101,12 @@ router.put('/:id', async (request, response) => {
   }
 });
 
+router.get('/:id', async (request, response) => {
+  const { id } = request.params;
+  const product = await database.query('SELECT * FROM products WHERE id = $1', [id]);
+  return response.status(200).send({ product });
+});
+
 router.delete('/:id', async (request, response) => {
   const { id } = request.params;
   await database.query('DELETE FROM products WHERE id = $1', [id]);
