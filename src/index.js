@@ -13,7 +13,7 @@ import authMiddleware from './middlewares/auth';
 import userRoutes from './controllers/userController';
 import products from './controllers/product';
 
-app.use('/api', userRoutes);
+app.use('/api/user', userRoutes);
 app.use('/product', products);
 
 const port = process.env.PORT || 5000;
