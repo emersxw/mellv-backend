@@ -16,6 +16,17 @@ import products from './controllers/product';
 app.use('/api/user', userRoutes);
 app.use('/product', products);
 
+// example of a protected route
+app.get('/secret',authMiddleware, (req, res) => {
+  console.log('====================================');
+  console.log(req.userId);
+  console.log('====================================');
+  res.send({
+    message: 'nice ;)',
+    cpf: req.userId
+  })
+})
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log('magic happens on port ' + port));
 
