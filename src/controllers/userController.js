@@ -6,35 +6,15 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-// user model on DB example
-// {
-//   "cpf": "222.222.222-22",
-//   "email": "maria.maria@gmail.com",
-//   "nome_completo": "Maria Flores",
-//   "data_nasc": "02-02-1999",
-//   "genero": "Feminino",
-//   "num_telefone": "38-98888-8888",
-//   "senha_usuario_cpf": "aaaaaaaaa123",
-//   "endereco": "Rua Sao Francisco",
-//   "num_endereco": 200,
-//   "bairro": "Sol",
-//   "cep": "43121-111",
-//   "cidade": "Matias",
-//   "uf": "SP"
-// }
-
 function generateToken(params = {}) {
   return jwt.sign(params, 'secret', {
     expiresIn: '30d',
   });
 }
 
-router.get('/', async (request, response) => {
+router.get('/all', async (request, response) => {
   try {
-    const { rows } = await database.query(
-      'SELECT * FROM usuario_cad_cpf',
-    );
-    // const data = await database.query('SELECT * FROM users');
+    const { rows } = await database.query('SELECT * FROM usuarios');
 
     if (!rows.length) {
       return response.status(404).json({ msg: 'not users found' });
@@ -55,46 +35,54 @@ router.post('/signup', async (request, response) => {
       cpf,
       email,
       nome_completo,
-      data_nasc,
+      nascimento,
       genero,
-      num_telefone,
-      senha_usuario_cpf,
-      endereco,
+      telefone,
+      senha,
+      rua,
       num_endereco,
       bairro,
       cep,
       cidade,
       uf,
+      nome_destinario,
+      referencia,
+      complemento,
+      instagram,
     } = request.body;
 
-    const hash = await bcrypt.hash(senha_usuario_cpf, 10);
-    senha_usuario_cpf = hash;
+    const hash = await bcrypt.hash(senha, 10);
+    senha = hash;
 
     await database.query(
-      'INSERT INTO usuario_cad_cpf (cpf, email, nome_completo, data_nasc, genero, num_telefone, senha_usuario_cpf, endereco, num_endereco, bairro, cep, cidade, uf) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
+      'INSERT INTO usuarios (cpf, email, nome_completo, nascimento, genero, telefone,senha, rua, num_endereco, bairro, cep, cidade, uf, nome_destinario, referencia, complemento, instagram) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)',
       [
         cpf,
         email,
         nome_completo,
-        data_nasc,
+        nascimento,
         genero,
-        num_telefone,
-        senha_usuario_cpf,
-        endereco,
+        telefone,
+        senha,
+        rua,
         num_endereco,
         bairro,
         cep,
         cidade,
         uf,
+        nome_destinario,
+        referencia,
+        complemento,
+        instagram,
       ],
     );
 
     const { rows } = await database.query(
-      'SELECT * FROM usuario_cad_cpf WHERE cpf = $1',
+      'SELECT * FROM usuarios WHERE cpf = $1',
       [cpf],
     );
 
-    rows[0].senha_usuario_cpf = undefined;
+    rows[0].senha = undefined;
 
     const token = generateToken({ id: cpf });
 

@@ -5,10 +5,10 @@ const router = express.Router();
 
 router.get('/', async (request, response) => {
   try {
-    const { rows } = await database.query('SELECT * FROM produtos');
+    const { rows } = await database.query('SELECT * FROM pedidos');
 
     if (!rows.length) {
-      return response.status(404).json({ msg: 'not products found' });
+      return response.status(404).json({ msg: 'not orders found' });
     }
 
     console.log('====================================');
@@ -22,7 +22,7 @@ router.get('/', async (request, response) => {
     console.log('====================================');
     return response
       .status(500)
-      .json({ msg: 'internal server error' });
+      .json({ msg: 'internal server error', error });
   }
   // nothing else runs ...
 });
@@ -32,33 +32,19 @@ router.get('/', async (request, response) => {
 router.post('/', async (request, response) => {
   try {
     const {
-      codigo,
-      nome,
-      preco,
-      descricao,
-      instrucoes,
-      tamanhos,
-      tipo,
-      foto_url,
+      usuario_id,
+      produto_codigo,
+      status_pedido,
     } = request.body;
 
     await database.query(
-      'INSERT INTO produtos (codigo, nome, preco, descricao, instrucoes, tamanhos, tipo, foto_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-      [
-        codigo,
-        nome,
-        preco,
-        descricao,
-        instrucoes,
-        tamanhos,
-        tipo,
-        foto_url,
-      ],
+      'INSERT INTO pedidos (usuario_id, produto_codigo, status_pedido) VALUES ($1, $2, $3)',
+      [usuario_id, produto_codigo, status_pedido],
     );
 
     return response
       .status(201)
-      .json({ status: 'success', message: 'product created' });
+      .json({ status: 'success', message: 'pedido created' });
   } catch (error) {
     console.log('====================================');
     console.log(error);
@@ -118,12 +104,3 @@ router.delete('/:id', async (request, response) => {
 });
 
 export default router;
-
-// {
-// 	"product_name": "Agora vai",
-// 	"product_type": 5,
-// 	"price": 250,
-// 	"size": "PP",
-// 	"product_description": "atualização",
-// 	"product_image": "nada"
-// }
