@@ -5,10 +5,10 @@ const router = express.Router();
 
 router.get('/', async (request, response) => {
   try {
-    const { rows } = await database.query('SELECT * FROM produtos');
+    const { rows } = await database.query('SELECT * FROM carrinho');
 
     if (!rows.length) {
-      return response.status(404).json({ msg: 'not products found' });
+      return response.status(404).json({ msg: 'not carrinho found' });
     }
 
     console.log('====================================');
@@ -22,7 +22,7 @@ router.get('/', async (request, response) => {
     console.log('====================================');
     return response
       .status(500)
-      .json({ msg: 'internal server error' });
+      .json({ msg: 'internal server error', error });
   }
   // nothing else runs ...
 });
@@ -31,34 +31,22 @@ router.get('/', async (request, response) => {
 
 router.post('/', async (request, response) => {
   try {
-    const {
-      codigo,
-      nome,
-      preco,
-      descricao,
-      instrucoes,
-      tamanhos,
-      tipo,
-      foto_url,
-    } = request.body;
+    const { usuario_id, produtos } = request.body;
+
+    // ('{"(408)-589-5842","(408)-589-58423"}');
+
+    console.log('====================================');
+    console.log(produtos);
+    console.log('====================================');
 
     await database.query(
-      'INSERT INTO produtos (codigo, nome, preco, descricao, instrucoes, tamanhos, tipo, foto_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-      [
-        codigo,
-        nome,
-        preco,
-        descricao,
-        instrucoes,
-        tamanhos,
-        tipo,
-        foto_url,
-      ],
+      'INSERT INTO carrinho (usuario_id, pedidos_id) VALUES ($1, $2)',
+      [usuario_id, produtos],
     );
 
     return response
       .status(201)
-      .json({ status: 'success', message: 'product created' });
+      .json({ status: 'success', message: 'carrinho created' });
   } catch (error) {
     console.log('====================================');
     console.log(error);

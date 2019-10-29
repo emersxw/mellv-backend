@@ -1,6 +1,6 @@
 logfile
 
-# .env
+.env
 
 node_modules/
 

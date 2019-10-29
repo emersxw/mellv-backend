@@ -11,15 +11,11 @@ router.get('/', async (request, response) => {
       return response.status(404).json({ msg: 'not orders found' });
     }
 
-    console.log('====================================');
     console.log('rows salvos -> ', rows);
-    console.log('====================================');
 
     return response.status(200).json(rows);
   } catch (error) {
-    console.log('====================================');
     console.log(error);
-    console.log('====================================');
     return response
       .status(500)
       .json({ msg: 'internal server error', error });
@@ -27,7 +23,6 @@ router.get('/', async (request, response) => {
   // nothing else runs ...
 });
 
-// CREATE TABLE products (ID SERIAL PRIMARY KEY, product_name VARCHAR(100), product_type INTEGER, price NUMERIC(15,6), size VARCHAR(50), product_description VARCHAR(5000), product_image VARCHAR(500));
 
 router.post('/', async (request, response) => {
   try {
@@ -46,9 +41,7 @@ router.post('/', async (request, response) => {
       .status(201)
       .json({ status: 'success', message: 'pedido created' });
   } catch (error) {
-    console.log('====================================');
     console.log(error);
-    console.log('====================================');
     return response
       .status(500)
       .json({ msg: 'isso derruba um banco', error });
