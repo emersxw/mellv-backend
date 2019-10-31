@@ -20,11 +20,13 @@ import userRoutes from './controllers/user';
 import products from './controllers/product';
 import pedidos from './controllers/pedidos';
 import carrinho from './controllers/carrinho';
+import checkout from './controllers/checkout';
 
 app.use('/api/user', userRoutes);
 app.use('/api/product', products);
 app.use('/api/pedidos', pedidos);
 app.use('/api/carrinho', carrinho);
+app.use('/api/checkout', checkout);
 
 // example of a protected route
 app.get('/secret', authMiddleware, (req, res) => {
