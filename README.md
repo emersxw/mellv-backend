@@ -6,7 +6,7 @@
 
 2 - npm
 
-3 - postgre
+3 - postgreSQL
 
 ### Iniciando o projeto
 
