@@ -2,7 +2,7 @@
 
 ### requirimentos
 
-1 - node
+1 - node >= 10
 
 2 - npm
 
