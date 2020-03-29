@@ -1,21 +1,14 @@
 import 'dotenv/config';
-import { Pool } from 'pg';
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+import mongoose from 'mongoose';
 
-export default { query: (text, params) => pool.query(text, params) };
+mongoose.connect(
+  'mongodb://localhost:27017/mellv-dev',
+  { useNewUrlParser: true }
+)
+  .then(() => console.log('Connected to DB...'))
+  .catch(err => console.error(err, 'Could not connect to MongoDB...'));
 
-// const isProduction = process.env.NODE_ENV === 'production'
+mongoose.Promise = global.Promise;
 
-// const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`
-
-// export const pool = new Pool({
-//   connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
-//   ssl: isProduction,
-// });
+export default mongoose;

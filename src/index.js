@@ -1,52 +1,31 @@
 import "@babel/polyfill";
 import express from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'dotenv/config';
+import morgan from 'morgan';
 
 const app = express();
 
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 app.use(cors());
 
 import authMiddleware from './middlewares/auth';
-import userRoutes from './controllers/userController';
 import products from './controllers/product';
+import user from './controllers/user';
+import auth from './controllers/auth';
 
-app.use('/api', userRoutes);
+app.get('/healthcheck', (req, res) => {
+  return res.status(200).json({ message: 'OK' })
+})
+
+app.use('/api/user', user);
+app.use('/api/auth', auth);
+
+// use the auth middleware here
+// products are currently in SQL
 app.use('/product', products);
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log('magic happens on port ' + port));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// app.use('/auth', auth);
-// app.use('/projects', authMiddleware, routes);
-// app.use('/api', authMiddleware, apiRoutes);
-
-
-// import 'dotenv/config';
-
-// const userCredentials = { firstname: 'Robin' };
-// const userDetails = { nationality: 'German' };
-
-// const user = {
-//   ...userCredentials,
-//   ...userDetails,
-// };
-
-// console.log(user);
-
-// console.log(process.env.SOME_ENV_VARIABLE);
+app.listen(port, () => console.log('Magic happens on port ' + port));
